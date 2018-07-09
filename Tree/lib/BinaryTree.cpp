@@ -122,6 +122,7 @@ void BinaryTree::postOrder(BiTree root) {
 }
 
 // 后序遍历（非递归）
+/*
 void BinaryTree::postOrderIter(BiTree root) 
 {
     if (root == NULL) 
@@ -148,7 +149,34 @@ void BinaryTree::postOrderIter(BiTree root)
     
     return;
 }
+*/
+void BinaryTree::postOrderIter(BiTree root) 
+{
+    if (root == NULL) 
+        return;
+    stack<BiNode *> s;
+    BiNode *pre = NULL; 
+    BiNode *cur = NULL; 
+    s.push(root);
+    while (!s.empty()) {
+        cur = s.top();
+        if ((cur->left == NULL && cur->right == NULL) || ((pre != NULL) && (pre == cur->left || pre == cur->right))) {
+            cout << cur->data << " ";
+            s.pop();
+            pre = cur;
+        } else {
+            if (cur->right) {
+                s.push(cur->right);
+            }
+            if (cur->left) {
+                s.push(cur->left);
+            }
+        }
+    } 
 
+    
+    return;
+}
 // 获取树高
 int BinaryTree::getHeight(BiTree root) {
     if (root == NULL) {
@@ -178,14 +206,15 @@ void BinaryTree::transLevelEasy(BiTree root)
     }
 }
 
+
 //  层次遍历(分层)
+/*
 void BinaryTree::transLevel(BiTree root)
 {
     if (root == NULL) 
         return;
-    queue<BiNode *> q1;
-    queue<BiNode *> q2;
-    BiNode * temp;
+    queue<BiNode *> q1,q2;
+    //queue<BiNode *> q2;
 
     q1.push(root);
     while (!q1.empty() || !q2.empty()) {
@@ -206,6 +235,133 @@ void BinaryTree::transLevel(BiTree root)
         
     }
 }
+*/
+
+//  层次遍历(之)
+void BinaryTree::transLevel(BiTree root)
+{
+    if (root == NULL) 
+        return;
+    stack<BiNode *> s1,s2;
+    s1.push(root);
+    while(!s1.empty() || !s2.empty()) {
+        while (!s1.empty()) {
+            root = s1.top();
+            cout << root -> data << " ";
+            s1.pop();
+            if (root->left) {
+                s2.push(root->left);
+            }
+            if (root->right) {
+                s2.push(root->right);
+            }
+        }
+        cout << endl;
+        while (!s2.empty()) {
+            root = s2.top();
+            cout << root->data << " ";
+            s2.pop();
+            if (root->right) {
+                s1.push(root->right);
+            }
+            if (root->left) {
+                s1.push(root->left);
+            }
+        }
+        cout  << endl;
+    }
+}
+
+//  镜像翻转
+BiNode * BinaryTree::mirrorReverse(BiTree root) 
+{
+    if (root == NULL)
+        return root;
+    BiNode *temp = mirrorReverse(root->left);
+    root->left = mirrorReverse(root->right);
+    root->right  = temp;
+    return root;
+}
+
+// 判断是不是镜像二叉树
+bool BinaryTree::isMirrorBiTree(BiTree root) 
+{
+    if (root == NULL)
+        return false;
+    return isMirrorBiTree_helper(root, root);
+
+}
+bool BinaryTree::isMirrorBiTree_helper(BiTree root1, BiTree root2)
+{
+    if (root1 == NULL && root2 == NULL)
+        return true;
+    if (root1 == NULL || root2 == NULL) 
+        return false;
+    // 还有真实值的比较啊！！
+    if (root1->data != root2->data) {
+        return false;
+    }
+    return  isMirrorBiTree_helper(root1->left, root2->right) 
+            && isMirrorBiTree_helper(root1->right, root2->left);
+}
+
+// 判断两个二叉树是不是相同
+bool isSameBiTree(BiTree root1, BiTree root2)
+{
+    if (root1 == NULL && root2 == NULL) 
+        return true;
+    if (root1 == NULL || root2 == NULL) 
+        return false;   
+    if (root1->data != root2->data) 
+        return false;
+    return isSameBiTree(root1->left, root2->left) && isSameBiTree(root1->right, root2->right);
+}
+
+// 判断一个树是不是另一个树的子树
+/*
+bool isChildTree(BiTree father, BiTree son)
+{
+    if (father == NULL && son == NULL)
+        return true;
+    if (father == NULL)
+        return false;
+    bool flag = false;
+    if (father != NULL && son != NULL) {
+        // 如果值相等，说明是交点了， 找别的值
+        if (father->data == son->data) {
+            flag = isChildTree_helper(father , son);
+        }
+        if (!flag) {
+            flag = isChildTree(father->left, son);
+        }
+        if (!flag) {
+            flag = isChildTree(father->right, son);
+        }
+    }
+    return flag;
+}
+
+bool isChildTree_helper(BiTree root1, BiTree root2)
+{
+    // 这里注意区分父子关系
+    if (root1 == NULL)
+        return false;
+    if (root2 == NULL) 
+        return true;
+    if (root1->data != root2->data)
+        return false;
+    return isChildTree_helper(root1->left, root2->left) &&
+           isChildTree_helper(root1->right, root2->right);
+        
+}
+*/
+
+// 判断一个序列是不是二叉搜索树的后序遍历
+bool isBSTPostOrder(string str, int& start, int& to)
+{
+    
+}
+
 
 ////////////
 ///// test

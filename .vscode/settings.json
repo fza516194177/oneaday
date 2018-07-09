@@ -10,6 +10,12 @@
         "stack": "cpp",
         "string": "cpp",
         "vector": "cpp",
-        "ios": "cpp"
+        "ios": "cpp",
+        "sstream": "cpp",
+        "algorithm": "cpp",
+        "__bit_reference": "cpp",
+        "__hash_table": "cpp",
+        "initializer_list": "cpp",
+        "unordered_map": "cpp"
     }
 }
